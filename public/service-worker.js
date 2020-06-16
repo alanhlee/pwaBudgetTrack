@@ -3,7 +3,7 @@ self.addEventListener("install", (event) => {
     caches
       .open("list-cache-v1")
       .then((cache) =>
-        cache.addAll(["/", "/db.min.js", "/app.min.js", "/manifest.json"])
+        cache.addAll(["/", "/db.min.js", "/app.min.js", "/manifest.json", '/styles.css', '/icons', '/index.js'])
       )
   );
 });
