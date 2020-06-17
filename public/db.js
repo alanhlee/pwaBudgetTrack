@@ -1,47 +1,48 @@
-let db;
+let db
 
-const request = indexedDB.open("list", 1);
+const request = indexedDB.open('list', 1)
 
-request.onupgradeneeded = (event) => {
-  db = event.target.result;
+request.onupgradeneeded = event => {
+  db = event.target.result
 
-  db.createObjectStore("pending", {
-    autoIncrement: true,
-  });
-};
+  db.createObjectStore('pending', {
+    autoIncrement: true
+  })
+}
 
-request.onsuccess = (event) => {
-  db = event.target.result;
+request.onsuccess = event => {
+  db = event.target.result
 
   if (navigator.onLine) {
-    checkDatabase();
+    checkDatabase()
   }
-};
+}
 
-request.onerror = (event) => {
-  console.log(event.target.errorCode);
-};
+request.onerror = event => {
+  console.log(event.target.errorCode)
+}
 
-const saveItem = (item) => {
-  const transaction = db.transaction(["pending"], "readwrite");
-  const store = transaction.objectStore("pending");
-  store.add(item);
-};
+const saveRecord = item => {
+  const transaction = db.transaction(['pending'], 'readwrite')
+  const store = transaction.objectStore('pending')
+  store.add(item)
+}
 
 const checkDatabase = () => {
-  const transaction = db.transaction(["pending"], "readwrite");
-  const store = transaction.objectStore("pending");
-  const getAll = store.getAll();
+  const transaction = db.transaction(['pending'], 'readwrite')
+  const store = transaction.objectStore('pending')
+  const getAll = store.getAll()
 
   getAll.onsuccess = () => {
     if (getAll.result.length > 0) {
-      axios.post("/api/transaction", getAll.result).then(() => {
-        const transaction = db.transaction(["pending"], "readwrite");
-        const store = transaction.objectStore("pending");
-        store.clear();
-      });
+      axios.post('/api/transaction/bulk', getAll.result)
+        .then(() => {
+          const transaction = db.transaction(['pending'], 'readwrite')
+          const store = transaction.objectStore('pending')
+          store.clear()
+        })
     }
-  };
-};
+  }
+}
 
-window.addEventListener("online", checkDatabase);
+window.addEventListener('online', checkDatabase)

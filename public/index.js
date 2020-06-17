@@ -1,9 +1,8 @@
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((reg) => console.log(reg));
-  });
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log(reg))
+  })
 }
 
 let transactions = [];
@@ -21,6 +20,7 @@ fetch("/api/transaction")
     populateTable();
     populateChart();
   });
+
 function populateTotal() {
   // reduce transaction amounts to a single total value
   let total = transactions.reduce((total, t) => {
